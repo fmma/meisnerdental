@@ -39,3 +39,23 @@ background: #FFFFFF
 width: 100%;
 background: #AA1111;
 }
+
+.menubar
+{
+}
+
+.submenu
+{
+}
+
+.menuitem
+{
+fill: #AA1111;
+stroke: #000000;
+}
+
+.submenuitem
+{
+fill: #AA1111;
+stroke: #000000;
+}

@@ -1,12 +1,14 @@
 
-var menus = ["Find os", "Levering", "Hej med dig", "lllllllllllllllllllllll"];
+var dy = -3;
 
-var submenus = [["ddasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "dasdas"], ["Sub  ds 2", "Sub d 3"], ["dsa das"], ["a","b","c","d","e"]];
+var menus = ["Menu item 1", "Menu item 2", "Menu item 3"];
+
+var submenus = [[], ["Sub menu item 1", "Sub menu item 2"], ["a","b","c","d","e","f"]];
 
 var subsvgs = [];
 
 function hover(e) {
-    mopen(subsvgs[e.target.menuId]);
+    mopen(e.target.svg);
 }
 
 function unhover(e) {
@@ -17,122 +19,125 @@ function hoversub(e) {
     mcancelclosetime();
 }
 
-var dy = -3;
-
 function init() {
     
-    var navsub = document.getElementById("navsub");
+    // Namespace
+    var ns = "http://www.w3.org/2000/svg";
 
-    var nav = document.getElementById("navsvg");
-    var w1 = nav.clientWidth;
+    var n = menus.length;
 
-    var cs = nav.getElementsByTagName("text");
-
-    var w2 = 0;
-
-    var cs = [];
-    var ws = [];
+    // Create navigation svg element
+    var nav = document.getElementById("nav");
+    var nsvg = document.createElementNS(ns, "svg");
+    nsvg.setAttribute("class", "topmenubar");
     var ts = [];
-
-    for(var i = 0; i < menus.length; i++) {
-	var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    for(var i = 0; i < n; i++) {
+	var r = document.createElementNS(ns, "rect");
+	var t = document.createElementNS(ns, "text");
+	var a = document.createElementNS(ns, "a");
+	a.setAttributeNS("http://www.w3.org/1999/xlink", "href", menus[i]);
 	t.textContent = menus[i];
 	t.onmouseover = hover;
 	t.onmouseout = unhover;
-	t.menuId = i;
-	nav.appendChild(t);
-	cs[i] = t;
+	r.onmouseover = hover;
+	r.onmouseout = unhover;
+	r.rect = r;
+	t.rect = r;
+	t.aelem = a;
+	a.appendChild(r);
+	a.appendChild(t);
+	nsvg.appendChild(a);
+	ts.push(t);
+    }
+    nav.appendChild(nsvg);
 
-	var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	svg.onmouseover = hoversub;
-	svg.onmouseout = unhover;
-	navsub.appendChild(svg);
-	subsvgs[i] = svg;
+    // Create sub menus
+    var navsub = document.getElementById("navsub");
+    var subsvgs = [];
+    var stss = [];
+    for(var i = 0; i < n; i++) {
+	var sts = [];
+	var submenu = submenus[i];
+	var m = submenu.length;
+	var subsvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	subsvg.onmouseover = hoversub;
+	subsvg.onmouseout = unhover;
+	subsvgs.push(subsvg);
+	ts[i].rect.svg = subsvg;
+	ts[i].svg = subsvg;
 
-	var maxw = cs[i].getBBox().width;
-	ts[i] = [];
-	for(var j = 0; j < submenus[i].length; j++) {
+	subsvg.setAttribute("class", "submenu");
+
+	for(var j = 0; j < m; j++) {
+	    var r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 	    var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	    var a = document.createElementNS("http://www.w3.org/2000/svg", "a");
+	    a.setAttributeNS("http://www.w3.org/1999/xlink", "href", menus[i] + "/" + submenus[i][j]);
+	    t.rect = r;
 	    t.textContent = submenus[i][j];
-	    svg.appendChild(t);
-	    var bbox = t.getBBox();
-	    maxw = Math.max(maxw, bbox.width);
-	    t.setAttribute("x", 0);
-	    t.setAttribute("y", (j+1) * bbox.height + dy);
-	    ts[i][j] = t;
+	    a.appendChild(r);
+	    a.appendChild(t);
+	    subsvg.appendChild(a);
+	    sts.push(t);
 	}
-
-	ws[i] = maxw;
-
+	stss.push(sts);
+	navsub.appendChild(subsvg);
+    }
+    
+    //Calculate each menu width and unpadded total width in the client.
+    var w1 = nav.clientWidth; 
+    var w2 = 0;
+    var ws = [];
+    
+    for(var i = 0; i < n; i++) {
+	var m = submenus[i].length;
+	var maxw = ts[i].getBBox().width;
+	for(var j = 0; j < m; j++) {
+	    maxw = Math.max(maxw, stss[i][j].getBBox().width);
+	}
+	ws.push(maxw);
 	w2 += maxw;
     }
+    var pad = (w1 - w2) / n;
+    var halfpad = pad / 2;
 
-    var dw = ((w1 - w2) / (cs.length));
+    // Adjust position and sizes to fit client
+    var cursor = halfpad;
 
-    var x = dw / 2;
+    if(ts.length > 0) {
+	h = ts[0].getBBox().height;
+	nav.setAttribute("style", "height:" + h);
 
-    for(var i = 0; i < cs.length; i++) {
-	
-	for(var j = 0; j < submenus[i].length; j++) {
-	    var bbox = ts[i][j].getBBox();
-	    ts[i][j].setAttribute("x", dw/2 + (ws[i] - bbox.width) / 2);
-	    if(j != 0) {
-		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-		line.setAttribute("x1", 0);
-		line.setAttribute("x2", dw + ws[i]);
-		line.setAttribute("y1", j * bbox.height);
-		line.setAttribute("y2", j * bbox.height);
-		line.setAttribute("stroke", "#000000");
-		subsvgs[i].appendChild(line);
-	    }
-	    else {
-				
-		var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-		rect.setAttribute("x", 0);
-		rect.setAttribute("y", 0);
-		rect.setAttribute("width", dw + ws[i]);
-		rect.setAttribute("height", bbox.height * submenus[i].length);
-		rect.setAttribute("stroke", "#000000");
-		rect.setAttribute("fill", "none");
-		
-		subsvgs[i].appendChild(rect);
-	    }
-	}
-
-	var c = cs[i];
-	var bbox = c.getBBox();
-
-	c.setAttribute("x", x + (ws[i] - bbox.width) / 2);
-	c.setAttribute("y", bbox.height + dy);
-
-	var svg = subsvgs[i];
-	svg.setAttribute("style", "z-index: 1000; position: absolute; left: " + (x - dw/2) + "px; top: 0px; height: " + (submenus[i].length * bbox.height) + "px; width: " + (ws[i] + dw) + "px;");
-	svg.style.visibility = 'hidden';
-	x += ws[i] + dw;
-
-	if(i != cs.length - 1) {
-	    var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-	    line.setAttribute("x1", x - dw/2);
-	    line.setAttribute("x2", x - dw/2);
-	    line.setAttribute("y1", 0);
-	    line.setAttribute("y2", bbox.height);
-	    line.setAttribute("stroke", "#000000");
-	    nav.appendChild(line);
-	}
-	else {
-	    nav.setAttribute("style", "height:" + bbox.height);
-	    document.getElementById("nav").setAttribute("style", "height:" + bbox.height);
+	for(var i = 0; i < n; i++) {
+	    var t = ts[i];
+	    var bbox = t.getBBox();
+	    t.setAttribute("x", cursor + (ws[i] - bbox.width) / 2);
+	    t.setAttribute("y", h + dy);
+	    t.rect.setAttribute("x", cursor - halfpad);
+	    t.rect.setAttribute("y", 0);
+	    t.rect.setAttribute("width", ws[i] + pad);
+	    t.rect.setAttribute("height", h);
+	    t.rect.setAttribute("class", "menuitem");
+	    var sts = stss[i];
+	    var m = sts.length;
 	    
-	    var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-	    rect.setAttribute("x", 0);
-	    rect.setAttribute("y", 0);
-	    rect.setAttribute("width", w1);
-	    rect.setAttribute("height", bbox.height);
-	    rect.setAttribute("stroke", "#000000");
-	    rect.setAttribute("fill", "none");
+	    subsvgs[i].setAttribute("style", "z-index: 1000; position: absolute; left: " + (cursor - halfpad) + "px; top: 0px; height: " + (m * h) + "px; width: " + (ws[i] + pad) + "px;");
+	    subsvgs[i].style.visibility = 'hidden';
 
-	    nav.appendChild(rect);
-	}
+	    for(var j = 0; j < m; j++) {
+		var t = sts[j];
+		var bbox = t.getBBox();
+		t.setAttribute("x", halfpad + (ws[i] - bbox.width) / 2);
+		t.setAttribute("y", (j+1) * h + dy);
+		t.rect.setAttribute("x", 0);
+		t.rect.setAttribute("y", j * h);
+		t.rect.setAttribute("width", ws[i] + pad);
+		t.rect.setAttribute("height", h);
+		t.rect.setAttribute("class", "submenuitem");
+	    }
+	    
+	    cursor += ws[i] + pad;
+	}	
     }
 }
 
