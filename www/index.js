@@ -1,10 +1,6 @@
 
 var dy = -3;
 
-var menus = ["Menu item 1", "Menu item 2", "Menu item 3"];
-
-var submenus = [[], ["Sub menu item 1", "Sub menu item 2"], ["a","b","c","d","e","f"]];
-
 var subsvgs = [];
 
 function hover(e) {
