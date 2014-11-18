@@ -1,0 +1,165 @@
+body
+  { font-family: Verdana, sans-serif
+  ; font-size: 80%; line-height: 140%
+  }
+
+h1, h2, h3, h4, h5, h6
+  { color:#c32
+  ; line-height: 100%
+  }
+
+h1, h2, h3 {font-size: 2em}
+h4 {font-size: 1.5em}
+h5 {font-size: 1.4em}
+h6 {font-size: 1.2em}
+a {color:#264}
+
+#body 
+  { width: 1000px
+  ; margin: 0 auto
+  ; position: relative
+  ; border-style: solid
+  ; border-radius: 10px
+  ; -moz-border-radius: 10px
+  }
+
+#body, #header
+  { border-color: #555
+  ; border-width: 0px
+  ; border-radius: 10px
+  ; -moz-border-radius: 10px
+  }
+
+#sitename 
+  { font-size: 2em
+  ; line-height: 100%
+  ; margin: 1em 0
+  ; color: #264
+  ; text-align: right
+  ; font-family: cursive
+  ; font-weight: bold
+  }
+
+#languagemenu {float: right}
+
+#header
+  { clear: both
+  ; height: 235px
+  ; background: #AA1111
+  ; position: relative
+  ; border-bottom-style: solid
+  }
+
+#header_content
+  { position: absolute
+  ; left: 50px
+  ; top: 30px
+  ; width: 330px
+  ; overflow: hidden
+  ; filter: alpha(opacity=75)
+  ; background: #fff
+  ; border-radius: 10px
+  ; -moz-border-radius: 10px
+  ; padding: 1em
+  }
+
+#mainimage
+  { position: absolute
+  ; left: 570px
+  ; top: 30px
+  }
+
+#mainimage img
+  { border-radius: 10px
+  ; -moz-border-radius: 10px
+  }
+
+#mainnav
+  { position: relative
+  ; left: 30px
+  ; top: 215px
+  ; width: 980px
+  ; z-index: 1
+  }
+
+#mainnav ul
+  { list-style: none
+  ; padding: 0
+  ; margin: 0
+  }
+
+#mainnav ul.menulevel2, #mainnav ul.menulevel3
+  { position: absolute
+  ; display: none
+  }
+
+#mainnav ul.menulevel2
+  { z-index:2
+  ; top: 44px
+  }
+
+#mainnav ul.menulevel3
+  { left: 200px
+  ; top: 0
+  }
+
+#mainnav ul.menulevel1 > li:hover > ul, #mainnav ul.menulevel2 > li:hover > ul {display: block}
+
+#mainnav li 
+  { position: relative
+  ; width: 134px
+  ; margin: 0
+  ; background: #811
+  ; font: 13px Verdana, sans-serif
+  ; text-align: center
+  ; color: white
+  }
+
+#mainnav ul.menulevel1 li
+  { float: left
+  ; border-bottom: 3px solid #444
+  }
+
+#mainnav ul.menulevel2 li, #mainnav ul.menulevel3 li
+  { float: none
+  ; border-bottom: none
+  }
+
+#mainnav a
+  { display: block
+  ; padding: 1em 0
+  ; color: white
+  ; text-decoration: none
+  }
+
+#mainnav li.sdoc > a, #mainnav li.sdocs > a
+  { color: #c32
+  ; font-weight: bold
+  }
+
+#mainnav li.sdoc > a:hover, #mainnav li.sdocs > a:hover, #mainnav a:hover {background: #444}
+
+#content
+  { float:left
+  ; width: 1000px
+  ; margin-top: 60px
+  }
+
+#sidebar
+  { float: right
+  ; width: 300px
+  }
+
+#specnav 
+  { text-align: right
+  ; margin: 1em 0 2em 0
+  }
+
+#searchform input.text {width: 200px}
+
+#footerbox 
+  { clear: both
+  ; padding-top: 30px
+  }
+
+#footer {text-align:center}
